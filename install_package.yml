@@ -1,0 +1,14 @@
+---
+- name: Installing packages
+  hosts: webserver
+  become: true
+
+  tasks:
+  - name: Installing Packages with Yum
+    yum:
+      name: "{{ item }}"
+    with_items:
+      - git
+      - wget
+      - python3
+      - gcc

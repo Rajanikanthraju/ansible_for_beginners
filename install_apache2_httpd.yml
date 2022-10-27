@@ -1,0 +1,37 @@
+---
+- name: Installing Webserver package
+  hosts: all
+  become: true
+
+  tasks:
+  - name: Installing httpd
+    yum:
+      name: httpd
+    when: ansible_os_family == 'RedHat'
+    tags: install_httpd
+
+  - name: Start the httpd server
+    service:
+      name: httpd
+      state: started
+    when: ansible_os_family == 'RedHat'
+    tags: start_httpd
+
+  - name: Installing apache2
+    apt:
+      name: apache2
+    when: ansible_os_family == 'Debian'
+    tags: install_apache2
+
+  - name: Start the apache2 server
+    service:
+      name: apache2
+      state: started
+    when: ansible_os_family == 'Debian'
+    tags: start_apache2
+
+  - name: copy the index.html
+    copy:
+      src: /opt/ansible/index.html
+      dest: /var/www/html
+      mode: '0666'

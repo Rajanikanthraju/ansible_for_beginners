@@ -1,0 +1,12 @@
+---
+- name: Copy file to another location
+  hosts: all
+  become: true
+
+  tasks:
+  - name: copy a file
+    copy:
+      src: /opt/ansible/index.html
+      dest: /home/ansadmin
+      owner: john
+      mode: '0644'

@@ -1,0 +1,37 @@
+---
+# tasks file for setup-apache2-httpd
+- name: Installing httpd
+  yum:
+    name: httpd
+  when: ansible_os_family == 'RedHat'
+  notify: Start httpd
+
+- name: Installing apache2
+  apt:
+    name: apache2
+  when: ansible_os_family == 'Debian'
+  notify: Start apache2
+
+- name: Ensure the default httpd port is {{ port }}
+  ansible.builtin.lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '^Listen '
+    insertafter: '^#Listen '
+    line: Listen {{ port }}
+  when: ansible_os_family == 'RedHat'
+  notify: Restart httpd
+
+- name: Ensure the default httpd port is {{ port }}
+  ansible.builtin.lineinfile:
+    path: /etc/apache2/ports.conf
+    regexp: '^Listen '
+    insertafter: '^# /etc/apache2/sites-enabled/000-default.conf '
+    line: Listen {{ port }}
+  when: ansible_os_family == 'Debian'
+  notify: Restart apache2
+
+- name: copy the index.html
+  copy:
+    src: /opt/ansible/index.html
+    dest: /var/www/html
+    mode: '0666'

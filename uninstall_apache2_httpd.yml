@@ -1,0 +1,31 @@
+---
+- name: Uninstalling Webserver package
+  hosts: all
+  become: true
+    #  gather_facts: no
+
+  tasks:
+  - name: Stop the httpd server
+    service:
+      name: httpd
+      state: stopped
+    when: ansible_os_family == 'RedHat'
+
+  - name: Uninstalling httpd
+    yum:
+      name: httpd
+      state: removed
+    when: ansible_os_family == 'RedHat'
+
+  - name: Stop the apache2 server
+    service:
+      name: apache2
+      state: stopped
+    when: ansible_os_family == 'Debian'
+
+  - name: Uninstalling apache2
+    apt:
+      name: apache2
+      state: absent
+    when: ansible_os_family == 'Debian'
+

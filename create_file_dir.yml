@@ -1,0 +1,11 @@
+---
+- name: Create file or Directory
+  hosts: all
+    # become: true
+  gather_facts: no
+
+  tasks:
+  - name: create a file
+    file:
+      path: /home/ansadmin/demofile
+      state: absent

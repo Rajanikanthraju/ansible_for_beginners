@@ -1,0 +1,6 @@
+---
+- name: Installing Webserver package
+  hosts: all
+  become: true
+  roles:
+    - setup-apache2-httpd
